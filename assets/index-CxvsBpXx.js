@@ -1,4 +1,4 @@
-(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var e=`/dashboard-gra/assets/logo-gra-TlnCa9h_.png`,t=`https://script.google.com/macros/s/AKfycbyWd4Bbl2hJHUXYbhzJ17ObdJk_puDYywwplCnxdJcsoNxZNOhbIDxo0pRKNtZAO1hglA/exec`,n=[`Comando`,`Sub.Comando`,`Operador Sentinel`,`Operador Raven`,`Operador Hawk`,`Operador Classe I`,`Operador Classe II`,`Operador Classe III`,`Aspirante a Operador`];document.querySelector(`#app`).innerHTML=`
+(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var e=`/dashboard-gra/assets/logo-gra-TlnCa9h_.png`,t=`https://script.google.com/macros/s/AKfycbyWd4Bbl2hJHUXYbhzJ17ObdJk_puDYywwplCnxdJcsoNxZNOhbIDxo0pRKNtZAO1hglA/exec`,n=`https://manualgra.gitbook.io/manual-de-conduta-g.r.a`,r=[`Comando`,`Sub.Comando`,`Operador Sentinel`,`Operador Raven`,`Operador Hawk`,`Operador Classe I`,`Operador Classe II`,`Operador Classe III`,`Aspirante a Operador`];document.querySelector(`#app`).innerHTML=`
   <div class="app-shell">
     <header class="hero">
       <div class="hero__overlay"></div>
@@ -18,6 +18,19 @@
           <p class="hero__subtitle">
             Painel administrativo com base em membros, apreensões e indicadores do grupamento.
           </p>
+        </div>
+
+        <div class="hero__actions">
+          <a
+            class="hero__manual-button"
+            href="${n}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Abrir Manual de Conduta"
+          >
+            <span class="hero__manual-button-label">Manual de Conduta</span>
+            <span class="hero__manual-button-subtitle">Abrir manual oficial</span>
+          </a>
         </div>
       </div>
     </header>
@@ -168,11 +181,11 @@
       </section>
     </main>
   </div>
-`;var r={members:[],ranking:[],apprehensions:[],selectedMemberId:null},i={totalMembers:document.querySelector(`#total-members`),totalApprehensions:document.querySelector(`#total-apprehensions`),averagePerMember:document.querySelector(`#average-per-member`),lastUpdate:document.querySelector(`#last-update`),activeMembersCount:document.querySelector(`#active-members-count`),awayMembersCount:document.querySelector(`#away-members-count`),inactiveMembersCount:document.querySelector(`#inactive-members-count`),membersTableBody:document.querySelector(`#members-table-body`),rankingList:document.querySelector(`#ranking-list`),searchInput:document.querySelector(`#search-input`),memberDetailsCard:document.querySelector(`#member-details-card`),detailName:document.querySelector(`#detail-name`),detailStatus:document.querySelector(`#detail-status`),detailWarnings:document.querySelector(`#detail-warnings`),detailApprehensions:document.querySelector(`#detail-apprehensions`),detailIdBadge:document.querySelector(`#detail-id-badge`),closeDetailsButton:document.querySelector(`#close-details-button`)};function a(e){return String(e||``).normalize(`NFD`).replace(/[\u0300-\u036f]/g,``).toLowerCase().trim()}function o(e){let t=String(e||``).trim();return t?t.charAt(0).toUpperCase():`✦`}function s(e){let t=a(e),r=n.findIndex(e=>a(e)===t);return r===-1?2**53-1:r}function c(e){return[...e].sort((e,t)=>{let n=s(e.rankGRA)-s(t.rankGRA);return n===0?String(e.name||``).localeCompare(String(t.name||``),`pt-BR`,{sensitivity:`base`}):n})}function l(e){let t=a(e);return t===`ativo`?`status-badge status-badge--active`:t===`inativo`?`status-badge status-badge--inactive`:t===`ausente`?`status-badge status-badge--away`:`status-badge`}function u(e){return r.apprehensions.find(t=>String(t.id||``).trim()===String(e||``).trim())}function d(e){return e.reduce((e,t)=>{let n=a(t.status);return n===`ativo`?e.active+=1:n===`ausente`?e.away+=1:n===`inativo`&&(e.inactive+=1),e},{active:0,away:0,inactive:0})}function f(e){let t=d(e);i.activeMembersCount.textContent=t.active,i.awayMembersCount.textContent=t.away,i.inactiveMembersCount.textContent=t.inactive}function p(e){let t=r.members.find(t=>String(t.id||``).trim()===String(e||``).trim());if(!t)return;let n=u(t.id)?.totalApprehensions??0,a=t.warnings||`0`,o=t.status||`Não informado`;r.selectedMemberId=t.id,i.detailName.textContent=t.name||`--`,i.detailStatus.innerHTML=`<span class="${l(o)}">${o}</span>`,i.detailWarnings.textContent=a,i.detailApprehensions.textContent=n,i.detailIdBadge.textContent=`${t.id||`--`} / ${t.badge||`--`}`,i.memberDetailsCard.hidden=!1}function m(){r.selectedMemberId=null,i.memberDetailsCard.hidden=!0}function h(e){i.totalMembers.textContent=e.totalMembers??0,i.totalApprehensions.textContent=e.totalApprehensions??0,i.averagePerMember.textContent=e.averagePerMember??0,i.lastUpdate.textContent=e.lastUpdate||`--/--/----`}function g(e){if(!e.length){i.membersTableBody.innerHTML=`
+`;var i={members:[],ranking:[],apprehensions:[],selectedMemberId:null},a={totalMembers:document.querySelector(`#total-members`),totalApprehensions:document.querySelector(`#total-apprehensions`),averagePerMember:document.querySelector(`#average-per-member`),lastUpdate:document.querySelector(`#last-update`),activeMembersCount:document.querySelector(`#active-members-count`),awayMembersCount:document.querySelector(`#away-members-count`),inactiveMembersCount:document.querySelector(`#inactive-members-count`),membersTableBody:document.querySelector(`#members-table-body`),rankingList:document.querySelector(`#ranking-list`),searchInput:document.querySelector(`#search-input`),memberDetailsCard:document.querySelector(`#member-details-card`),detailName:document.querySelector(`#detail-name`),detailStatus:document.querySelector(`#detail-status`),detailWarnings:document.querySelector(`#detail-warnings`),detailApprehensions:document.querySelector(`#detail-apprehensions`),detailIdBadge:document.querySelector(`#detail-id-badge`),closeDetailsButton:document.querySelector(`#close-details-button`)};function o(e){return String(e||``).normalize(`NFD`).replace(/[\u0300-\u036f]/g,``).toLowerCase().trim()}function s(e){let t=String(e||``).trim();return t?t.charAt(0).toUpperCase():`✦`}function c(e){let t=o(e),n=r.findIndex(e=>o(e)===t);return n===-1?2**53-1:n}function l(e){return[...e].sort((e,t)=>{let n=c(e.rankGRA)-c(t.rankGRA);return n===0?String(e.name||``).localeCompare(String(t.name||``),`pt-BR`,{sensitivity:`base`}):n})}function u(e){let t=o(e);return t===`ativo`?`status-badge status-badge--active`:t===`inativo`?`status-badge status-badge--inactive`:t===`ausente`?`status-badge status-badge--away`:`status-badge`}function d(e){return i.apprehensions.find(t=>String(t.id||``).trim()===String(e||``).trim())}function f(e){return e.reduce((e,t)=>{let n=o(t.status);return n===`ativo`?e.active+=1:n===`ausente`?e.away+=1:n===`inativo`&&(e.inactive+=1),e},{active:0,away:0,inactive:0})}function p(e){let t=f(e);a.activeMembersCount.textContent=t.active,a.awayMembersCount.textContent=t.away,a.inactiveMembersCount.textContent=t.inactive}function m(e){let t=i.members.find(t=>String(t.id||``).trim()===String(e||``).trim());if(!t)return;let n=d(t.id)?.totalApprehensions??0,r=t.warnings||`0`,o=t.status||`Não informado`;i.selectedMemberId=t.id,a.detailName.textContent=t.name||`--`,a.detailStatus.innerHTML=`<span class="${u(o)}">${o}</span>`,a.detailWarnings.textContent=r,a.detailApprehensions.textContent=n,a.detailIdBadge.textContent=`${t.id||`--`} / ${t.badge||`--`}`,a.memberDetailsCard.hidden=!1}function h(){i.selectedMemberId=null,a.memberDetailsCard.hidden=!0}function g(e){a.totalMembers.textContent=e.totalMembers??0,a.totalApprehensions.textContent=e.totalApprehensions??0,a.averagePerMember.textContent=e.averagePerMember??0,a.lastUpdate.textContent=e.lastUpdate||`--/--/----`}function _(e){if(!e.length){a.membersTableBody.innerHTML=`
       <tr>
         <td colspan="5">Nenhum membro encontrado.</td>
       </tr>
-    `;return}let t=c(e);i.membersTableBody.innerHTML=t.map(e=>`
+    `;return}let t=l(e);a.membersTableBody.innerHTML=t.map(e=>`
         <tr>
           <td>${e.id||`-`}</td>
           <td>
@@ -188,7 +201,7 @@
           <td>${e.rankGRA||`-`}</td>
           <td>${e.rankBPM||`-`}</td>
         </tr>
-      `).join(``)}function _(e){if(!e.length){i.rankingList.innerHTML=`
+      `).join(``)}function v(e){if(!e.length){a.rankingList.innerHTML=`
       <div class="ranking-item">
         <div class="ranking-item__avatar">✦</div>
         <div class="ranking-item__info">
@@ -197,20 +210,20 @@
         </div>
         <strong class="ranking-item__score">0</strong>
       </div>
-    `;return}i.rankingList.innerHTML=e.map(e=>`
+    `;return}a.rankingList.innerHTML=e.map(e=>`
         <div class="ranking-item">
-          <div class="ranking-item__avatar">${o(e.name)}</div>
+          <div class="ranking-item__avatar">${s(e.name)}</div>
           <div class="ranking-item__info">
             <strong>${e.name||`-`}</strong>
             <span>${e.rankGRA||`-`}</span>
           </div>
           <strong class="ranking-item__score">${e.totalApprehensions??0}</strong>
         </div>
-      `).join(``)}function v(e){let t=a(e);if(!t){g(r.members);return}g(r.members.filter(e=>{let n=a(e.name),r=a(e.id),i=a(e.badge);return n.includes(t)||r.includes(t)||i.includes(t)}))}async function y(){try{let e=`${t}?t=${Date.now()}`,n=await(await fetch(e,{method:`GET`,cache:`no-store`})).json();if(!n.success)throw Error(n.error||`Falha ao carregar os dados da API.`);r.members=n.members||[],r.ranking=n.ranking||[],r.apprehensions=n.apprehensions||[],h(n.stats||{}),f(r.members),g(r.members),_(r.ranking)}catch(e){console.error(`Erro ao carregar dashboard:`,e),i.membersTableBody.innerHTML=`
+      `).join(``)}function y(e){let t=o(e);if(!t){_(i.members);return}_(i.members.filter(e=>{let n=o(e.name),r=o(e.id),i=o(e.badge);return n.includes(t)||r.includes(t)||i.includes(t)}))}async function b(){try{let e=`${t}?t=${Date.now()}`,n=await(await fetch(e,{method:`GET`,cache:`no-store`})).json();if(!n.success)throw Error(n.error||`Falha ao carregar os dados da API.`);i.members=n.members||[],i.ranking=n.ranking||[],i.apprehensions=n.apprehensions||[],g(n.stats||{}),p(i.members),_(i.members),v(i.ranking)}catch(e){console.error(`Erro ao carregar dashboard:`,e),a.membersTableBody.innerHTML=`
       <tr>
         <td colspan="5">Erro ao carregar membros.</td>
       </tr>
-    `,i.rankingList.innerHTML=`
+    `,a.rankingList.innerHTML=`
       <div class="ranking-item">
         <div class="ranking-item__avatar">!</div>
         <div class="ranking-item__info">
@@ -219,4 +232,4 @@
         </div>
         <strong class="ranking-item__score">0</strong>
       </div>
-    `}}i.searchInput.addEventListener(`input`,e=>{v(e.target.value)}),i.membersTableBody.addEventListener(`click`,e=>{let t=e.target.closest(`.member-name-button`);if(!t)return;let n=t.dataset.memberId;p(n)}),i.closeDetailsButton.addEventListener(`click`,()=>{m()}),y();
+    `}}a.searchInput.addEventListener(`input`,e=>{y(e.target.value)}),a.membersTableBody.addEventListener(`click`,e=>{let t=e.target.closest(`.member-name-button`);if(!t)return;let n=t.dataset.memberId;m(n)}),a.closeDetailsButton.addEventListener(`click`,()=>{h()}),b();
