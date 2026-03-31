@@ -179,23 +179,43 @@ document.querySelector('#app').innerHTML = `
           </div>
         </article>
 
-        <article class="card panel">
-          <div class="panel__header">
-            <h2>Ranking de apreensões</h2>
-            <span class="panel__tag">Operacional</span>
-          </div>
-
-          <div id="ranking-list" class="ranking-list">
-            <div class="ranking-item">
-              <div class="ranking-item__avatar">✦</div>
-              <div class="ranking-item__info">
-                <strong>Carregando...</strong>
-                <span>Aguardando dados</span>
-              </div>
-              <strong class="ranking-item__score">0</strong>
+        <aside class="side-rankings">
+          <article class="card panel">
+            <div class="panel__header">
+              <h2>Ranking Total</h2>
+              <span class="panel__tag">Operacional</span>
             </div>
-          </div>
-        </article>
+
+            <div id="ranking-list" class="ranking-list ranking-list--compact">
+              <div class="ranking-item">
+                <div class="ranking-item__avatar">✦</div>
+                <div class="ranking-item__info">
+                  <strong>Carregando...</strong>
+                  <span>Aguardando dados</span>
+                </div>
+                <strong class="ranking-item__score">0</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="card panel">
+            <div class="panel__header">
+              <h2>Ranking Mensal</h2>
+              <span id="monthly-reference" class="panel__tag panel__tag--monthly">Sem mês</span>
+            </div>
+
+            <div id="monthly-ranking-list" class="ranking-list ranking-list--compact">
+              <div class="ranking-item">
+                <div class="ranking-item__avatar">✦</div>
+                <div class="ranking-item__info">
+                  <strong>Carregando...</strong>
+                  <span>Aguardando mês atual</span>
+                </div>
+                <strong class="ranking-item__score">0</strong>
+              </div>
+            </div>
+          </article>
+        </aside>
       </section>
     </main>
   </div>
@@ -204,6 +224,8 @@ document.querySelector('#app').innerHTML = `
 const state = {
   members: [],
   ranking: [],
+  monthlyRanking: [],
+  monthlyReference: '',
   apprehensions: [],
   selectedMemberId: null,
 }
@@ -218,6 +240,8 @@ const elements = {
   inactiveMembersCount: document.querySelector('#inactive-members-count'),
   membersTableBody: document.querySelector('#members-table-body'),
   rankingList: document.querySelector('#ranking-list'),
+  monthlyRankingList: document.querySelector('#monthly-ranking-list'),
+  monthlyReference: document.querySelector('#monthly-reference'),
   searchInput: document.querySelector('#search-input'),
   memberDetailsCard: document.querySelector('#member-details-card'),
   detailName: document.querySelector('#detail-name'),
@@ -254,9 +278,7 @@ function sortMembersByRank(members) {
   return [...members].sort((a, b) => {
     const rankComparison = getRankOrderIndex(a.rankGRA) - getRankOrderIndex(b.rankGRA)
 
-    if (rankComparison !== 0) {
-      return rankComparison
-    }
+    if (rankComparison !== 0) return rankComparison
 
     return String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR', {
       sensitivity: 'base',
@@ -372,14 +394,14 @@ function renderMembers(members) {
     .join('')
 }
 
-function renderRanking(ranking) {
+function renderRankingList(targetElement, ranking, scoreKey, emptySubtitle) {
   if (!ranking.length) {
-    elements.rankingList.innerHTML = `
+    targetElement.innerHTML = `
       <div class="ranking-item">
         <div class="ranking-item__avatar">✦</div>
         <div class="ranking-item__info">
           <strong>Nenhum dado</strong>
-          <span>Aguardando apreensões</span>
+          <span>${emptySubtitle}</span>
         </div>
         <strong class="ranking-item__score">0</strong>
       </div>
@@ -387,20 +409,24 @@ function renderRanking(ranking) {
     return
   }
 
-  elements.rankingList.innerHTML = ranking
+  targetElement.innerHTML = ranking
     .map(
       (member) => `
         <div class="ranking-item">
           <div class="ranking-item__avatar">${createAvatarLabel(member.name)}</div>
           <div class="ranking-item__info">
             <strong>${member.name || '-'}</strong>
-            <span>${member.rankGRA || '-'}</span>
+            <span>${member.rankGRA || member.rankBPM || '-'}</span>
           </div>
-          <strong class="ranking-item__score">${member.totalApprehensions ?? 0}</strong>
+          <strong class="ranking-item__score">${member[scoreKey] ?? 0}</strong>
         </div>
       `
     )
     .join('')
+}
+
+function renderMonthlyReference(label) {
+  elements.monthlyReference.textContent = label || 'Sem mês'
 }
 
 function filterMembers(searchTerm) {
@@ -442,12 +468,16 @@ async function loadDashboardData() {
 
     state.members = data.members || []
     state.ranking = data.ranking || []
+    state.monthlyRanking = data.monthlyRanking || []
+    state.monthlyReference = data.monthlyReferenceLabel || data.monthlyReference || ''
     state.apprehensions = data.apprehensions || []
 
     renderStats(data.stats || {})
     renderStatusCounters(state.members)
     renderMembers(state.members)
-    renderRanking(state.ranking)
+    renderRankingList(elements.rankingList, state.ranking, 'totalApprehensions', 'Aguardando apreensões')
+    renderRankingList(elements.monthlyRankingList, state.monthlyRanking, 'apprehensionsInMonth', 'Aguardando mês atual')
+    renderMonthlyReference(state.monthlyReference)
   } catch (error) {
     console.error('Erro ao carregar dashboard:', error)
 
@@ -458,6 +488,17 @@ async function loadDashboardData() {
     `
 
     elements.rankingList.innerHTML = `
+      <div class="ranking-item">
+        <div class="ranking-item__avatar">!</div>
+        <div class="ranking-item__info">
+          <strong>Erro ao carregar</strong>
+          <span>Verifique a API e tente novamente</span>
+        </div>
+        <strong class="ranking-item__score">0</strong>
+      </div>
+    `
+
+    elements.monthlyRankingList.innerHTML = `
       <div class="ranking-item">
         <div class="ranking-item__avatar">!</div>
         <div class="ranking-item__info">
