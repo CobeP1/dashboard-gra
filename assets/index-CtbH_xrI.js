@@ -161,27 +161,47 @@
           </div>
         </article>
 
-        <article class="card panel">
-          <div class="panel__header">
-            <h2>Ranking de apreensões</h2>
-            <span class="panel__tag">Operacional</span>
-          </div>
-
-          <div id="ranking-list" class="ranking-list">
-            <div class="ranking-item">
-              <div class="ranking-item__avatar">✦</div>
-              <div class="ranking-item__info">
-                <strong>Carregando...</strong>
-                <span>Aguardando dados</span>
-              </div>
-              <strong class="ranking-item__score">0</strong>
+        <aside class="side-rankings">
+          <article class="card panel">
+            <div class="panel__header">
+              <h2>Ranking Total</h2>
+              <span class="panel__tag">Operacional</span>
             </div>
-          </div>
-        </article>
+
+            <div id="ranking-list" class="ranking-list ranking-list--compact">
+              <div class="ranking-item">
+                <div class="ranking-item__avatar">✦</div>
+                <div class="ranking-item__info">
+                  <strong>Carregando...</strong>
+                  <span>Aguardando dados</span>
+                </div>
+                <strong class="ranking-item__score">0</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="card panel">
+            <div class="panel__header">
+              <h2>Ranking Mensal</h2>
+              <span id="monthly-reference" class="panel__tag panel__tag--monthly">Sem mês</span>
+            </div>
+
+            <div id="monthly-ranking-list" class="ranking-list ranking-list--compact">
+              <div class="ranking-item">
+                <div class="ranking-item__avatar">✦</div>
+                <div class="ranking-item__info">
+                  <strong>Carregando...</strong>
+                  <span>Aguardando mês atual</span>
+                </div>
+                <strong class="ranking-item__score">0</strong>
+              </div>
+            </div>
+          </article>
+        </aside>
       </section>
     </main>
   </div>
-`;var i={members:[],ranking:[],apprehensions:[],selectedMemberId:null},a={totalMembers:document.querySelector(`#total-members`),totalApprehensions:document.querySelector(`#total-apprehensions`),averagePerMember:document.querySelector(`#average-per-member`),lastUpdate:document.querySelector(`#last-update`),activeMembersCount:document.querySelector(`#active-members-count`),awayMembersCount:document.querySelector(`#away-members-count`),inactiveMembersCount:document.querySelector(`#inactive-members-count`),membersTableBody:document.querySelector(`#members-table-body`),rankingList:document.querySelector(`#ranking-list`),searchInput:document.querySelector(`#search-input`),memberDetailsCard:document.querySelector(`#member-details-card`),detailName:document.querySelector(`#detail-name`),detailStatus:document.querySelector(`#detail-status`),detailWarnings:document.querySelector(`#detail-warnings`),detailApprehensions:document.querySelector(`#detail-apprehensions`),detailIdBadge:document.querySelector(`#detail-id-badge`),closeDetailsButton:document.querySelector(`#close-details-button`)};function o(e){return String(e||``).normalize(`NFD`).replace(/[\u0300-\u036f]/g,``).toLowerCase().trim()}function s(e){let t=String(e||``).trim();return t?t.charAt(0).toUpperCase():`✦`}function c(e){let t=o(e),n=r.findIndex(e=>o(e)===t);return n===-1?2**53-1:n}function l(e){return[...e].sort((e,t)=>{let n=c(e.rankGRA)-c(t.rankGRA);return n===0?String(e.name||``).localeCompare(String(t.name||``),`pt-BR`,{sensitivity:`base`}):n})}function u(e){let t=o(e);return t===`ativo`?`status-badge status-badge--active`:t===`inativo`?`status-badge status-badge--inactive`:t===`ausente`?`status-badge status-badge--away`:`status-badge`}function d(e){return i.apprehensions.find(t=>String(t.id||``).trim()===String(e||``).trim())}function f(e){return e.reduce((e,t)=>{let n=o(t.status);return n===`ativo`?e.active+=1:n===`ausente`?e.away+=1:n===`inativo`&&(e.inactive+=1),e},{active:0,away:0,inactive:0})}function p(e){let t=f(e);a.activeMembersCount.textContent=t.active,a.awayMembersCount.textContent=t.away,a.inactiveMembersCount.textContent=t.inactive}function m(e){let t=i.members.find(t=>String(t.id||``).trim()===String(e||``).trim());if(!t)return;let n=d(t.id)?.totalApprehensions??0,r=t.warnings||`0`,o=t.status||`Não informado`;i.selectedMemberId=t.id,a.detailName.textContent=t.name||`--`,a.detailStatus.innerHTML=`<span class="${u(o)}">${o}</span>`,a.detailWarnings.textContent=r,a.detailApprehensions.textContent=n,a.detailIdBadge.textContent=`${t.id||`--`} / ${t.badge||`--`}`,a.memberDetailsCard.hidden=!1}function h(){i.selectedMemberId=null,a.memberDetailsCard.hidden=!0}function g(e){a.totalMembers.textContent=e.totalMembers??0,a.totalApprehensions.textContent=e.totalApprehensions??0,a.averagePerMember.textContent=e.averagePerMember??0,a.lastUpdate.textContent=e.lastUpdate||`--/--/----`}function _(e){if(!e.length){a.membersTableBody.innerHTML=`
+`;var i={members:[],ranking:[],monthlyRanking:[],monthlyReference:``,apprehensions:[],selectedMemberId:null},a={totalMembers:document.querySelector(`#total-members`),totalApprehensions:document.querySelector(`#total-apprehensions`),averagePerMember:document.querySelector(`#average-per-member`),lastUpdate:document.querySelector(`#last-update`),activeMembersCount:document.querySelector(`#active-members-count`),awayMembersCount:document.querySelector(`#away-members-count`),inactiveMembersCount:document.querySelector(`#inactive-members-count`),membersTableBody:document.querySelector(`#members-table-body`),rankingList:document.querySelector(`#ranking-list`),monthlyRankingList:document.querySelector(`#monthly-ranking-list`),monthlyReference:document.querySelector(`#monthly-reference`),searchInput:document.querySelector(`#search-input`),memberDetailsCard:document.querySelector(`#member-details-card`),detailName:document.querySelector(`#detail-name`),detailStatus:document.querySelector(`#detail-status`),detailWarnings:document.querySelector(`#detail-warnings`),detailApprehensions:document.querySelector(`#detail-apprehensions`),detailIdBadge:document.querySelector(`#detail-id-badge`),closeDetailsButton:document.querySelector(`#close-details-button`)};function o(e){return String(e||``).normalize(`NFD`).replace(/[\u0300-\u036f]/g,``).toLowerCase().trim()}function s(e){let t=String(e||``).trim();return t?t.charAt(0).toUpperCase():`✦`}function c(e){let t=o(e),n=r.findIndex(e=>o(e)===t);return n===-1?2**53-1:n}function l(e){return[...e].sort((e,t)=>{let n=c(e.rankGRA)-c(t.rankGRA);return n===0?String(e.name||``).localeCompare(String(t.name||``),`pt-BR`,{sensitivity:`base`}):n})}function u(e){let t=o(e);return t===`ativo`?`status-badge status-badge--active`:t===`inativo`?`status-badge status-badge--inactive`:t===`ausente`?`status-badge status-badge--away`:`status-badge`}function d(e){return i.apprehensions.find(t=>String(t.id||``).trim()===String(e||``).trim())}function f(e){return e.reduce((e,t)=>{let n=o(t.status);return n===`ativo`?e.active+=1:n===`ausente`?e.away+=1:n===`inativo`&&(e.inactive+=1),e},{active:0,away:0,inactive:0})}function p(e){let t=f(e);a.activeMembersCount.textContent=t.active,a.awayMembersCount.textContent=t.away,a.inactiveMembersCount.textContent=t.inactive}function m(e){let t=i.members.find(t=>String(t.id||``).trim()===String(e||``).trim());if(!t)return;let n=d(t.id)?.totalApprehensions??0,r=t.warnings||`0`,o=t.status||`Não informado`;i.selectedMemberId=t.id,a.detailName.textContent=t.name||`--`,a.detailStatus.innerHTML=`<span class="${u(o)}">${o}</span>`,a.detailWarnings.textContent=r,a.detailApprehensions.textContent=n,a.detailIdBadge.textContent=`${t.id||`--`} / ${t.badge||`--`}`,a.memberDetailsCard.hidden=!1}function h(){i.selectedMemberId=null,a.memberDetailsCard.hidden=!0}function g(e){a.totalMembers.textContent=e.totalMembers??0,a.totalApprehensions.textContent=e.totalApprehensions??0,a.averagePerMember.textContent=e.averagePerMember??0,a.lastUpdate.textContent=e.lastUpdate||`--/--/----`}function _(e){if(!e.length){a.membersTableBody.innerHTML=`
       <tr>
         <td colspan="5">Nenhum membro encontrado.</td>
       </tr>
@@ -201,25 +221,25 @@
           <td>${e.rankGRA||`-`}</td>
           <td>${e.rankBPM||`-`}</td>
         </tr>
-      `).join(``)}function v(e){if(!e.length){a.rankingList.innerHTML=`
+      `).join(``)}function v(e,t,n,r){if(!t.length){e.innerHTML=`
       <div class="ranking-item">
         <div class="ranking-item__avatar">✦</div>
         <div class="ranking-item__info">
           <strong>Nenhum dado</strong>
-          <span>Aguardando apreensões</span>
+          <span>${r}</span>
         </div>
         <strong class="ranking-item__score">0</strong>
       </div>
-    `;return}a.rankingList.innerHTML=e.map(e=>`
+    `;return}e.innerHTML=t.map(e=>`
         <div class="ranking-item">
           <div class="ranking-item__avatar">${s(e.name)}</div>
           <div class="ranking-item__info">
             <strong>${e.name||`-`}</strong>
-            <span>${e.rankGRA||`-`}</span>
+            <span>${e.rankGRA||e.rankBPM||`-`}</span>
           </div>
-          <strong class="ranking-item__score">${e.totalApprehensions??0}</strong>
+          <strong class="ranking-item__score">${e[n]??0}</strong>
         </div>
-      `).join(``)}function y(e){let t=o(e);if(!t){_(i.members);return}_(i.members.filter(e=>{let n=o(e.name),r=o(e.id),i=o(e.badge);return n.includes(t)||r.includes(t)||i.includes(t)}))}async function b(){try{let e=`${t}?t=${Date.now()}`,n=await(await fetch(e,{method:`GET`,cache:`no-store`})).json();if(!n.success)throw Error(n.error||`Falha ao carregar os dados da API.`);i.members=n.members||[],i.ranking=n.ranking||[],i.apprehensions=n.apprehensions||[],g(n.stats||{}),p(i.members),_(i.members),v(i.ranking)}catch(e){console.error(`Erro ao carregar dashboard:`,e),a.membersTableBody.innerHTML=`
+      `).join(``)}function y(e){a.monthlyReference.textContent=e||`Sem mês`}function b(e){let t=o(e);if(!t){_(i.members);return}_(i.members.filter(e=>{let n=o(e.name),r=o(e.id),i=o(e.badge);return n.includes(t)||r.includes(t)||i.includes(t)}))}async function x(){try{let e=`${t}?t=${Date.now()}`,n=await(await fetch(e,{method:`GET`,cache:`no-store`})).json();if(!n.success)throw Error(n.error||`Falha ao carregar os dados da API.`);i.members=n.members||[],i.ranking=n.ranking||[],i.monthlyRanking=n.monthlyRanking||[],i.monthlyReference=n.monthlyReferenceLabel||n.monthlyReference||``,i.apprehensions=n.apprehensions||[],g(n.stats||{}),p(i.members),_(i.members),v(a.rankingList,i.ranking,`totalApprehensions`,`Aguardando apreensões`),v(a.monthlyRankingList,i.monthlyRanking,`apprehensionsInMonth`,`Aguardando mês atual`),y(i.monthlyReference)}catch(e){console.error(`Erro ao carregar dashboard:`,e),a.membersTableBody.innerHTML=`
       <tr>
         <td colspan="5">Erro ao carregar membros.</td>
       </tr>
@@ -232,4 +252,13 @@
         </div>
         <strong class="ranking-item__score">0</strong>
       </div>
-    `}}a.searchInput.addEventListener(`input`,e=>{y(e.target.value)}),a.membersTableBody.addEventListener(`click`,e=>{let t=e.target.closest(`.member-name-button`);if(!t)return;let n=t.dataset.memberId;m(n)}),a.closeDetailsButton.addEventListener(`click`,()=>{h()}),b();
+    `,a.monthlyRankingList.innerHTML=`
+      <div class="ranking-item">
+        <div class="ranking-item__avatar">!</div>
+        <div class="ranking-item__info">
+          <strong>Erro ao carregar</strong>
+          <span>Verifique a API e tente novamente</span>
+        </div>
+        <strong class="ranking-item__score">0</strong>
+      </div>
+    `}}a.searchInput.addEventListener(`input`,e=>{b(e.target.value)}),a.membersTableBody.addEventListener(`click`,e=>{let t=e.target.closest(`.member-name-button`);if(!t)return;let n=t.dataset.memberId;m(n)}),a.closeDetailsButton.addEventListener(`click`,()=>{h()}),x();
