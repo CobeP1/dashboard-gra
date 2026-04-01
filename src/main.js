@@ -454,11 +454,9 @@ function filterMembers(searchTerm) {
 
 async function loadDashboardData() {
   try {
-    const cacheBustedUrl = `${API_URL}?t=${Date.now()}`
-    const response = await fetch(cacheBustedUrl, {
-      method: 'GET',
-      cache: 'no-store',
-    })
+    const response = await fetch(API_URL, {
+  method: 'GET',
+})
 
     const data = await response.json()
 
