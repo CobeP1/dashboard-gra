@@ -226,7 +226,6 @@ const state = {
   ranking: [],
   monthlyRanking: [],
   monthlyReference: '',
-  apprehensions: [],
   selectedMemberId: null,
 }
 
@@ -296,12 +295,6 @@ function getStatusClass(status) {
   return 'status-badge'
 }
 
-function getMemberApprehensionData(memberId) {
-  return state.apprehensions.find(
-    (item) => String(item.id || '').trim() === String(memberId || '').trim()
-  )
-}
-
 function getStatusCounts(members) {
   return members.reduce(
     (acc, member) => {
@@ -332,8 +325,7 @@ function openMemberDetails(memberId) {
 
   if (!member) return
 
-  const apprehensionData = getMemberApprehensionData(member.id)
-  const totalApprehensions = apprehensionData?.totalApprehensions ?? 0
+  const totalApprehensions = member.totalApprehensions ?? 0
   const warnings = member.warnings || '0'
   const status = member.status || 'Não informado'
 
@@ -455,8 +447,8 @@ function filterMembers(searchTerm) {
 async function loadDashboardData() {
   try {
     const response = await fetch(API_URL, {
-  method: 'GET',
-})
+      method: 'GET',
+    })
 
     const data = await response.json()
 
@@ -468,13 +460,22 @@ async function loadDashboardData() {
     state.ranking = data.ranking || []
     state.monthlyRanking = data.monthlyRanking || []
     state.monthlyReference = data.monthlyReferenceLabel || data.monthlyReference || ''
-    state.apprehensions = data.apprehensions || []
 
     renderStats(data.stats || {})
     renderStatusCounters(state.members)
     renderMembers(state.members)
-    renderRankingList(elements.rankingList, state.ranking, 'totalApprehensions', 'Aguardando apreensões')
-    renderRankingList(elements.monthlyRankingList, state.monthlyRanking, 'apprehensionsInMonth', 'Aguardando mês atual')
+    renderRankingList(
+      elements.rankingList,
+      state.ranking,
+      'totalApprehensions',
+      'Aguardando apreensões'
+    )
+    renderRankingList(
+      elements.monthlyRankingList,
+      state.monthlyRanking,
+      'apprehensionsInMonth',
+      'Aguardando mês atual'
+    )
     renderMonthlyReference(state.monthlyReference)
   } catch (error) {
     console.error('Erro ao carregar dashboard:', error)
