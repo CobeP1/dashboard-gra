@@ -1,7 +1,7 @@
 import './style.css'
 import logoGRA from './assets/logo-gra.png'
 
-const API_URL = 'https://script.google.com/macros/s/AKfycby2aHIs5BK7ZmQdu5Dh36AOQDaJ3hJSpkJeJAf9SwtPcHy1OSE3LeeDad1u-_wuD1kLkQ/exec'
+const API_URL = 'https://script.google.com/macros/s/AKfycbxDiNY7AHI2_4uNd-MHXFcHB5H25LDs5gztwZejjeyrBZ6htMthSuYk6HSw_QQF_ShU8PuBlwxJW7Wd3yNZcqA9-2wPMDCGJ7XNIDWUKPYbMxT_QBiC5xWd2OmFEK0bSoc_p-UeM11iz_io/exec'
 const MANUAL_URL = 'https://manualgra.gitbook.io/manual-de-conduta-g.r.a'
 
 const RANK_ORDER = [
@@ -323,9 +323,15 @@ function openMemberDetails(memberId) {
     (item) => String(item.id || '').trim() === String(memberId || '').trim()
   )
 
-  if (!member) return
+  if (!member) {
+    console.log('MEMBRO NÃO ENCONTRADO PARA ID:', memberId)
+    return
+  }
 
-  const totalApprehensions = member.totalApprehensions ?? 0
+  console.log('MEMBRO CLICADO:', member)
+  console.log('TOTAL DO MEMBRO CLICADO:', member?.totalApprehensions)
+
+  const totalApprehensions = Number(member.totalApprehensions || 0)
   const warnings = member.warnings || '0'
   const status = member.status || 'Não informado'
 
@@ -334,7 +340,7 @@ function openMemberDetails(memberId) {
   elements.detailName.textContent = member.name || '--'
   elements.detailStatus.innerHTML = `<span class="${getStatusClass(status)}">${status}</span>`
   elements.detailWarnings.textContent = warnings
-  elements.detailApprehensions.textContent = totalApprehensions
+  elements.detailApprehensions.textContent = String(totalApprehensions)
   elements.detailIdBadge.textContent = `${member.id || '--'} / ${member.badge || '--'}`
   elements.memberDetailsCard.hidden = false
 }
@@ -460,6 +466,14 @@ async function loadDashboardData() {
     state.ranking = data.ranking || []
     state.monthlyRanking = data.monthlyRanking || []
     state.monthlyReference = data.monthlyReferenceLabel || data.monthlyReference || ''
+
+    console.log('MEMBERS DA API:', state.members)
+    console.log(
+      'HUGO NA STATE:',
+      state.members.find((m) => String(m.id || '').trim() === '1186')
+    )
+    console.log('RANKING DA API:', state.ranking)
+    console.log('MONTHLY RANKING DA API:', state.monthlyRanking)
 
     renderStats(data.stats || {})
     renderStatusCounters(state.members)
