@@ -323,13 +323,7 @@ function openMemberDetails(memberId) {
     (item) => String(item.id || '').trim() === String(memberId || '').trim()
   )
 
-  if (!member) {
-    console.log('MEMBRO NÃO ENCONTRADO PARA ID:', memberId)
-    return
-  }
-
-  console.log('MEMBRO CLICADO:', member)
-  console.log('TOTAL DO MEMBRO CLICADO:', member?.totalApprehensions)
+  if (!member) return
 
   const totalApprehensions = Number(member.totalApprehensions || 0)
   const warnings = member.warnings || '0'
@@ -466,14 +460,6 @@ async function loadDashboardData() {
     state.ranking = data.ranking || []
     state.monthlyRanking = data.monthlyRanking || []
     state.monthlyReference = data.monthlyReferenceLabel || data.monthlyReference || ''
-
-    console.log('MEMBERS DA API:', state.members)
-    console.log(
-      'HUGO NA STATE:',
-      state.members.find((m) => String(m.id || '').trim() === '1186')
-    )
-    console.log('RANKING DA API:', state.ranking)
-    console.log('MONTHLY RANKING DA API:', state.monthlyRanking)
 
     renderStats(data.stats || {})
     renderStatusCounters(state.members)
