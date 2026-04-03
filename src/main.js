@@ -1,7 +1,7 @@
 import './style.css'
 import logoGRA from './assets/logo-gra.png'
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbxDiNY7AHI2_4uNd-MHXFcHB5H25LDs5gztwZejjeyrBZ6htMthSuYk6HSw_QQF_ShU8PuBlwxJW7Wd3yNZcqA9-2wPMDCGJ7XNIDWUKPYbMxT_QBiC5xWd2OmFEK0bSoc_p-UeM11iz_io/exec'
+const API_URL = 'https://script.google.com/macros/s/AKfycby2aHIs5BK7ZmQdu5Dh36AOQDaJ3hJSpkJeJAf9SwtPcHy1OSE3LeeDad1u-_wuD1kLkQ/exec'
 const MANUAL_URL = 'https://manualgra.gitbook.io/manual-de-conduta-g.r.a'
 
 const RANK_ORDER = [
